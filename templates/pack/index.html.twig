@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PackController!{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <h1 class="mt-4">PACK D'OFFRES</h1>
+            <div class="">
+                <table class="">
+                    <tbody class="d-flex flex-wrap align-content-center">
+                    {% for pack in packs %}
+                        <tr>
+                            <td>
+                                <div class="card ms-6" style="width: 14rem; height: 10rem;">
+                                    <p>{{ pack.name }}</p>
+                                    <p>Prix : {{ pack.price }}€</p>
+                                    <p>Nombre slots: {{ pack.numberSlot }}</p>
+                                    <a href="/pack/info/{{ pack.id }}" class="btn btn-primary">Plus
+                                        d'information</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Info Pack {{ pack.name }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>{{ pack.name }}</h1>
+        <ul>
+            <li>
+                nombre d'emplacement : {{ pack.numberSlot }}
+            </li>
+            <li>
+                prix : {{ pack.price }} €
+            </li>
+        </ul>
+        <a href="/pack/buy/{{ pack.id }}" class="btn btn-primary">Acheter</a>
+    </div>
+{% endblock %}

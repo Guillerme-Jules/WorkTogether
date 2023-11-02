@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Buy Pack {{ pack.name }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <ul>Nom du pack : {{ pack.name }}</ul>
+        <ul>Prix : {{ pack.price }}€</ul>
+        <ul>Nombre d'emplacement : {{ pack.numberSlot }}</ul>
+        <ul>{{ form(form) }}</ul>
+    </div>
+{% endblock %}
