@@ -1,0 +1,13 @@
+# config/validator/reservation.yaml
+App\Entity\Reservation:
+  properties:
+    code:
+      - NotNull: ~
+    startDate :
+      - NotNull: ~
+    pack:
+      - NotNull: ~
+    typeReservation:
+      - NotNull: ~
+    client:
+      - NotNull: ~

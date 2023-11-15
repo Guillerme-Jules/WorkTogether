@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\DTO\Buy;
+use App\Entity\Customer;
 use App\Entity\Pack;
 use App\Entity\Reservation;
+use App\Entity\Unit;
 use App\Form\BuyFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,6 +27,7 @@ class PackController extends AbstractController
             'packs' => $packs,
         ]);
     }
+
     #[Route('pack/info/{id}', name: 'app_pack_info')]
     public function info(EntityManagerInterface $entityManager, $id): Response
     {
@@ -34,23 +38,30 @@ class PackController extends AbstractController
             'pack' => $pack,
         ]);
     }
+
     #[Route('pack/buy/{id}', name: 'app_pack_buy')]
-    public function buy(Request $request,EntityManagerInterface $entityManager, $id): Response
+    public function buy(Request $request, EntityManagerInterface $entityManager, $id): Response
     {
         $pack = $entityManager->getRepository(Pack::class)->find($id);
-        $reservation = new Reservation();
-        $reservation->setClient($this->getUser());
-        $reservation->setPack($pack);
-        $reservation->setPrice($pack->getPrice());
-        $reservation->setStartDate(new \DateTime('now'));
-
-        $form = $this->createForm(BuyFormType::class, $reservation);
+        $buy = new Buy();
+        $form = $this->createForm(BuyFormType::class, $buy);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($reservation);
-            $entityManager->flush();
+            $user = $this->getUser();
+            $customer = $entityManager->getRepository(Customer::class)->findOneBy(array('email' => $user->getUserIdentifier()));
+            for ($i = 0; $i < $buy->getQuantity(); $i++) {
+                $reservation = new Reservation();
+                $reservation->setElement($pack, $customer, $buy);
+                $entityManager->persist($reservation);
+                $entityManager->flush();
+                $units = $entityManager->getRepository(Unit::class)->findBy(array('reservation' => null));
+                for ($j = 0; $j < $reservation->getPack()->getNumberSlot(); $j++) {
+                    $units[$j]->setReservation($reservation);
+                    $entityManager->flush();
+                }
+            }
+            return $this->redirectToRoute("app_reservation");
 
-            return $this->redirectToRoute("app_home");
         }
         return $this->render('pack/buy.html.twig', [
             'controller_name' => 'PackController',

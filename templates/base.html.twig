@@ -27,9 +27,6 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/pack/list">Nos Packs</a>
                 </li>
-                <li>
-                    <a class="nav-link" href="#">Nos Baies</a>
-                </li>
                 {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <li>
                         <a class="nav-link" href="/login">Connexion</a>
@@ -40,7 +37,7 @@
                 {% endif %}
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <li>
-                        <a class="nav-link" href="#">Mon Compte</a>
+                        <a class="nav-link" href="/reservation">Mon Compte</a>
                     </li>
                     <li>
                         <a class="nav-link" href="/logout">Déconnexion</a>

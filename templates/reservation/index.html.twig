@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ReservationController!{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Vos informations :</h1>
+        <ul>Nom : {{ customer.lastname }}</ul>
+        <ul>Prénom : {{ customer.firstname }}</ul>
+        <ul>Email : {{ customer.email }}</ul>
+        <ul>Date de naissance : {{ customer.birthday |date('d-m-Y') }}</ul>
+        <h1>Vos reservations :</h1>
+        <div class="">
+            <table class="">
+                <tbody class="d-flex flex-wrap align-content-center">
+                {% for reservation in reservations %}
+                    <tr>
+                        <td>
+                            <div class="card ms-6" style="width: 14rem; height: 10rem;">
+                                <p>Nom du pack : {{ reservation.pack.name }}</p>
+                                <p>Prix : {{ reservation.price }}€</p>
+                                <p>Nombre slots : {{ reservation.pack.numberSlot }}</p>
+                                <a href="/reservation/unit/{{ reservation.id }}" class="btn btn-primary">Vos unités</a>
+                                <a href="/reservation/delete/{{ reservation.id }}" class="btn btn-warning">Se désabonner</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

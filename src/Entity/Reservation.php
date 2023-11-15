@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\DTO\Buy;
 use App\Repository\ReservationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -180,5 +181,21 @@ class Reservation
         }
 
         return $this;
+    }
+
+    public function setElement(Pack $pack, Customer $customer, Buy $buy): void
+    {
+        $this->setPack($pack);
+        $this->setClient($customer);
+        $dateNow = new \DateTime('now');
+        $this->setStartDate($dateNow);
+        $this->setCode(date('ymd').$pack->getId());
+        $price = $pack->getPrice() * $buy->getTypeReservation()->getMonth() * (1 - $buy->getTypeReservation()->getPercentage() / 100);
+        $this->setPrice($price);
+        $this->setPercentage($buy->getTypeReservation()->getPercentage());
+        $interval = new \DateInterval('P' . $buy->getTypeReservation()->getMonth() . 'M');
+        $this->setTypeReservation($buy->getTypeReservation());
+        $this->setEndDate(Date_add(new \DateTime('now'), $interval));
+
     }
 }

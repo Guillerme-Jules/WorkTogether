@@ -21,6 +21,17 @@ class UnitRepository extends ServiceEntityRepository
         parent::__construct($registry, Unit::class);
     }
 
+//    public function findRack($value): array
+//    {
+//        return $this->createQueryBuilder('a')
+//            ->select('a.locationSlot', 'r.name')
+//            ->innerJoin('a.rack', 'r')
+//            ->andWhere('a.reservation = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getResult()
+//            ;
+//    }
 //    /**
 //     * @return Unit[] Returns an array of Unit objects
 //     */
