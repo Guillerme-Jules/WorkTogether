@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DTO\Registration;
 use App\Entity\Customer;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
@@ -18,18 +19,23 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        $customer = new Customer();
-        $form = $this->createForm(RegistrationFormType::class, $customer);
+        $registration = new Registration();
+        $form = $this->createForm(RegistrationFormType::class, $registration);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
+            $customer = new Customer();
             $customer->setPassword(
                 $userPasswordHasher->hashPassword(
                     $customer,
-                    $form->get('plainPassword')->getData()
+                    $form->get('password')->getData()
                 )
             );
+            $customer->setEmail($registration->getEmail());
+            $customer->setBirthday($registration->getBirthday());
+            $customer->setFirstName($registration->getFirstName());
+            $customer->setLastName($registration->getLastName());
 
             $entityManager->persist($customer);
             $entityManager->flush();

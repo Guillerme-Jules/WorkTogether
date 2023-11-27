@@ -1,0 +1,21 @@
+# config/validator/registration.yaml
+App\DTO\Registration:
+  properties:
+    email:
+      - NotBlank:
+          message: "Veuillez remplir ce champs."
+      - Email:
+          message: "L'email {{ value }} n'est pas valide."
+    password:
+      - NotBlank:
+          message: "Veuillez remplir ce champs"
+      - NotEqualTo:
+          propertyPath: email
+          message: "Votre mot de passe ne doit pas être votre adresse email"
+      - Length:
+          min: 8
+          max: 4096
+          minMessage: 'Votre mot de passe doit faire au moins {{ limit }} caractères'
+    agreeTerms:
+      - IsTrue:
+          message: "Vous devez accepter les Conditions d'utilisation"

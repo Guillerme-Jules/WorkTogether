@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\DTO\Registration;
 use App\Entity\Customer;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
@@ -26,32 +27,14 @@ class RegistrationFormType extends AbstractType
             ->add('birthday', DateType::class, [
                 'label' => 'Date de naissance',
                 'years' => range(1900,2023)])
-            ->add('plainPassword', PasswordType::class, [
+            ->add('password', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'label' => 'Mot de passe',
-                'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'label' => 'Accepter les termes',
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
             ])
         ;
     }
@@ -59,7 +42,7 @@ class RegistrationFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Customer::class,
+            'data_class' => Registration::class,
         ]);
     }
 }

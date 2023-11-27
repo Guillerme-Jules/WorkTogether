@@ -42,32 +42,38 @@ class PackController extends AbstractController
     #[Route('pack/buy/{id}', name: 'app_pack_buy')]
     public function buy(Request $request, EntityManagerInterface $entityManager, $id): Response
     {
+        $messageError = "";
         $pack = $entityManager->getRepository(Pack::class)->find($id);
         $buy = new Buy();
         $form = $this->createForm(BuyFormType::class, $buy);
         $form->handleRequest($request);
+        $units = $entityManager->getRepository(Unit::class)->findBy(array('reservation' => null));
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->getUser();
-            $customer = $entityManager->getRepository(Customer::class)->findOneBy(array('email' => $user->getUserIdentifier()));
-            for ($i = 0; $i < $buy->getQuantity(); $i++) {
-                $reservation = new Reservation();
-                $reservation->setElement($pack, $customer, $buy);
-                $entityManager->persist($reservation);
-                $entityManager->flush();
-                $units = $entityManager->getRepository(Unit::class)->findBy(array('reservation' => null));
-                for ($j = 0; $j < $reservation->getPack()->getNumberSlot(); $j++) {
-                    $units[$j]->setReservation($reservation);
+            if (count($units) >= $pack->getNumberSlot()) {
+                $user = $this->getUser();
+                $customer = $entityManager->getRepository(Customer::class)->findOneBy(array('email' => $user->getUserIdentifier()));
+                for ($i = 0; $i < $buy->getQuantity(); $i++) {
+                    $reservation = new Reservation();
+                    $reservation->setElement($pack, $customer, $buy);
+                    $entityManager->persist($reservation);
                     $entityManager->flush();
+                    for ($j = 0; $j < $reservation->getPack()->getNumberSlot(); $j++) {
+                        $units[$j]->setReservation($reservation);
+                        $entityManager->flush();
+                    }
                 }
-            }
-            return $this->redirectToRoute("app_reservation");
 
+                return $this->redirectToRoute("app_reservation");
+            }
+            else{
+                $messageError = "Il n'y a plus assez d'unité de libre";
+            }
         }
         return $this->render('pack/buy.html.twig', [
             'controller_name' => 'PackController',
             'form' => $form,
             'pack' => $pack,
-
+            'messageError' => $messageError,
         ]);
     }
 }

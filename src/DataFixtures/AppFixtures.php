@@ -122,7 +122,7 @@ class AppFixtures extends Fixture
             for ($i = 1; $i <= $rack->getNumberSlot(); $i++) {
                 $unit = new Unit();
                 $unit->setLocationSlot($i);
-                $unit->setTypeUnit($typeUnit[random_int(0, count($typeUnit) - 1)]);
+                $unit->setTypeUnit(null);
                 $unit->setRack($rack);
                 $unit->setReservation(null);
                 $manager->persist($unit);

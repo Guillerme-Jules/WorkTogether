@@ -18,14 +18,19 @@ class ChoiceTypeUnitFormType extends AbstractType
     {
         foreach ($options['units'] as $unit){
         $builder
-            ->add('U'.$unit->getId().'O'.$unit->getRack()->getId(),
+            ->add($unit->getId(),
                     EntityType::class, [
                         'class' => TypeUnit::class,
                         'choice_label' => 'name',
+                        'placeholder' => 'Rien',
                         'required' => false,
-                        'mapped' => false
+                        'mapped' => false,
+                        'label' => 'Emplacement: '.$unit->getLocationSlot().' Baie: '.$unit->getRack()->getId(),
+                        'data' => $unit->getTypeUnit(),
                     ]);
         }
+        $builder
+            ->add('Modifier', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
