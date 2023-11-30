@@ -24,9 +24,13 @@ class Customer extends User
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Reservation::class)]
     private Collection $reservations;
 
+    #[ORM\OneToMany(mappedBy: 'Customer', targetEntity: CustomerTicket::class)]
+    private Collection $customerTickets;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
+        $this->customerTickets = new ArrayCollection();
     }
 
     public function getFirstName(): ?string
@@ -89,6 +93,36 @@ class Customer extends User
             // set the owning side to null (unless already changed)
             if ($reservation->getClient() === $this) {
                 $reservation->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CustomerTicket>
+     */
+    public function getCustomerTickets(): Collection
+    {
+        return $this->customerTickets;
+    }
+
+    public function addCustomerTicket(CustomerTicket $customerTicket): static
+    {
+        if (!$this->customerTickets->contains($customerTicket)) {
+            $this->customerTickets->add($customerTicket);
+            $customerTicket->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCustomerTicket(CustomerTicket $customerTicket): static
+    {
+        if ($this->customerTickets->removeElement($customerTicket)) {
+            // set the owning side to null (unless already changed)
+            if ($customerTicket->getCustomer() === $this) {
+                $customerTicket->setCustomer(null);
             }
         }
 

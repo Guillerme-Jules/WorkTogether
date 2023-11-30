@@ -1,0 +1,8 @@
+# config/validator/ticket.yaml
+App\Entity\ticket:
+  Name:
+    - NotBlank:
+        message: "Veuillez remplir ce champs."
+  Description:
+    - NotBlank:
+        message: "Veuillez remplir ce champs."

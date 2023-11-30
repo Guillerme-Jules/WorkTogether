@@ -3,6 +3,8 @@
 namespace App\DataFixtures;
 
 use App\DTO\Buy;
+use App\Entity\Accountant;
+use App\Entity\Admin;
 use App\Entity\Customer;
 use App\Entity\Pack;
 use App\Entity\Rack;
@@ -81,10 +83,26 @@ class AppFixtures extends Fixture
             // Génération de dates de naissance aléatoires pour les utilisateurs
             $birthday = new \DateTime();
             $birthday->setTimestamp(mt_rand(strtotime('1980-01-01'), strtotime('2000-12-31')));
+            $customer->setRoles(["ROLE_CLIENT"]);
             $customer->setBirthday($birthday);
 
             $manager->persist($customer);
         }
+        $manager->flush();
+        $admin = new Admin();
+        $admin->setEmail("admin@admin.com");
+        $password = $this->hasher->hashPassword($admin, 'admin-Password');
+        $admin->setPassword($password);
+        $admin->setRoles(["ROLE_ADMIN"]);
+        $manager->persist($admin);
+        $manager->flush();
+
+        $accountant = new Accountant();
+        $accountant->setEmail("compt@compt.com");
+        $password = $this->hasher->hashPassword($accountant, 'compt-Password');
+        $accountant->setPassword($password);
+        $accountant->setRoles(["ROLE_COMPT"]);
+        $manager->persist($accountant);
         $manager->flush();
         // Création des baies dans une boucle
         for ($i = 1; $i <= 10; $i++) {

@@ -27,7 +27,7 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/pack/list">Nos Packs</a>
                 </li>
-                {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                {% if not is_granted('ROLE_USER') %}
                     <li>
                         <a class="nav-link" href="/login">Connexion</a>
                     </li>
@@ -35,10 +35,15 @@
                         <a class="nav-link" href="/register">Inscription</a>
                     </li>
                 {% endif %}
-                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                {% if is_granted('ROLE_CLIENT') %}
                     <li>
                         <a class="nav-link" href="/reservation">Mon Compte</a>
                     </li>
+                    <li>
+                        <a class="nav-link" href="/ticket">Aide</a>
+                    </li>
+                {% endif %}
+                {% if is_granted('ROLE_USER') %}
                     <li>
                         <a class="nav-link" href="/logout">Déconnexion</a>
                     </li>

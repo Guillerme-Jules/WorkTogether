@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
+#[IsGranted('ROLE_CLIENT')]
 class ReservationController extends AbstractController
 {
     #[Route('/reservation', name: 'app_reservation')]

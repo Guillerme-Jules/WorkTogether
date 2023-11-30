@@ -13,6 +13,6 @@
                 prix : {{ pack.price }} €
             </li>
         </ul>
-        <a href="{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}/pack/buy/{{ pack.id }}{% else %}/login{% endif %}" class="btn btn-primary">Acheter</a>
+        <a href="{% if is_granted('ROLE_USER') %}/pack/buy/{{ pack.id }}{% else %}/login{% endif %}" class="btn btn-primary">Acheter</a>
     </div>
 {% endblock %}

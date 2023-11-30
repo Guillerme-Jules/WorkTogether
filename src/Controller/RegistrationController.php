@@ -36,6 +36,7 @@ class RegistrationController extends AbstractController
             $customer->setBirthday($registration->getBirthday());
             $customer->setFirstName($registration->getFirstName());
             $customer->setLastName($registration->getLastName());
+            $customer->setRoles(["ROLE_CLIENT"]);
 
             $entityManager->persist($customer);
             $entityManager->flush();

@@ -14,6 +14,7 @@ use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PackController extends AbstractController
 {
@@ -39,6 +40,7 @@ class PackController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_CLIENT')]
     #[Route('pack/buy/{id}', name: 'app_pack_buy')]
     public function buy(Request $request, EntityManagerInterface $entityManager, $id): Response
     {

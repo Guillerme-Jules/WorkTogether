@@ -6,6 +6,12 @@ App\DTO\Registration:
           message: "Veuillez remplir ce champs."
       - Email:
           message: "L'email {{ value }} n'est pas valide."
+    firstName:
+      - NotBlank:
+          message: "Veuillez remplir ce champs."
+    lastName:
+      - NotBlank:
+          message: "Veuillez remplir ce champs."
     password:
       - NotBlank:
           message: "Veuillez remplir ce champs"
