@@ -14,9 +14,20 @@ class SecurityController extends AbstractController
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
-
+        $lastUsername = "";
+        if($error != null){
+            $filename = 'C:\Users\Guillerme\BTS IIA\Symfony\WorkTogether Document\auth.log';
+            $date = new \DateTime('now');
+            $lastUsername = $authenticationUtils->getLastUsername();
+            $contenuDuFichier = $lastUsername.",".$date->format("Y-m-d_h:i:s").",false"."\r\n";
+            file_put_contents($filename, $contenuDuFichier, FILE_APPEND);
+        }
         // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
+
+
+
+
+
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,

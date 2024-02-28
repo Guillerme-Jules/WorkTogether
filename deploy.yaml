@@ -1,0 +1,42 @@
+import:
+  - recipe/symfony.php
+  - contrib/yarn.php
+
+config:
+  application: 'WorkTogether'
+  repository: 'git@github.com:Guillerme-Jules/WorkTogether.git'
+  keep_releases: 3
+
+hosts:
+  10.193.49.20:
+    remote_user: root
+    user: jules
+    deploy_path: '/var/www/worktogether'
+    writable_mode: 'chmod'
+    composer_options: '--no-dev --verbose --prefer-dist --optimize-autoloader --no-progress --no-interaction'
+    port: 22
+    identity_file: ~/.ssh/id_rsa_E5
+    branch: main
+    env:
+      APP_ENV: prod
+      APP_DEBUG: 0
+
+tasks:
+  deploy:upload_assets:
+    - run: "mkdir -p {{release_path}}/public/build"
+    - upload:
+        src: './public/build'
+        dest: '{{release_path}}/public'
+
+  deploy:build:
+    - runLocally: 'yarn install'
+    - runLocally: 'yarn encore production'
+
+#  deploy:change_ownership:
+#    - run: 'chown -R www-data:www-data {{release_path}}/public'
+
+after:
+  deploy:failed: 'deploy:unlock'
+  deploy:vendors: 'deploy:build'
+  deploy:build: 'deploy:upload_assets'
+#  deploy:upload_assets: 'deploy:change_ownership'

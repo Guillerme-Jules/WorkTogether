@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TypeReservationRepository::class)]
-class TypeReservation
+class   TypeReservation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

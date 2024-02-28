@@ -51,7 +51,7 @@ class PackController extends AbstractController
         $form->handleRequest($request);
         $units = $entityManager->getRepository(Unit::class)->findBy(array('reservation' => null));
         if ($form->isSubmitted() && $form->isValid()) {
-            if (count($units) >= $pack->getNumberSlot()) {
+            if (count($units) >= $pack->getNumberSlot()*$buy->getQuantity()) {
                 $user = $this->getUser();
                 $customer = $entityManager->getRepository(Customer::class)->findOneBy(array('email' => $user->getUserIdentifier()));
                 for ($i = 0; $i < $buy->getQuantity(); $i++) {
@@ -59,6 +59,7 @@ class PackController extends AbstractController
                     $reservation->setElement($pack, $customer, $buy);
                     $entityManager->persist($reservation);
                     $entityManager->flush();
+                    $units = $entityManager->getRepository(Unit::class)->findBy(array('reservation' => null));
                     for ($j = 0; $j < $reservation->getPack()->getNumberSlot(); $j++) {
                         $units[$j]->setReservation($reservation);
                         $entityManager->flush();

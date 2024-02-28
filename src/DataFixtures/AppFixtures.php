@@ -6,6 +6,7 @@ use App\DTO\Buy;
 use App\Entity\Accountant;
 use App\Entity\Admin;
 use App\Entity\Customer;
+use App\Entity\CustomerTicket;
 use App\Entity\Pack;
 use App\Entity\Rack;
 use App\Entity\Reservation;
@@ -103,6 +104,17 @@ class AppFixtures extends Fixture
         $accountant->setPassword($password);
         $accountant->setRoles(["ROLE_COMPT"]);
         $manager->persist($accountant);
+        $manager->flush();
+        // Création des tickets
+        $customers = $manager->getRepository(Customer::class)->findAll();
+        for ($i = 1; $i <= 10; $i++) {
+            $ticket = new CustomerTicket();
+            $ticket->setDone(false);
+            $ticket->setName("ticket".$i);
+            $ticket->setDescription("J'ai rencontré un problème ...");
+            $ticket->setCustomer($customers[random_int(0, count($customers) - 1)]);
+            $manager->persist($ticket);
+        }
         $manager->flush();
         // Création des baies dans une boucle
         for ($i = 1; $i <= 10; $i++) {
