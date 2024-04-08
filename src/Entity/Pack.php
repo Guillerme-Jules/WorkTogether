@@ -28,6 +28,9 @@ class Pack
     #[ORM\OneToMany(mappedBy: 'pack', targetEntity: Reservation::class)]
     private Collection $reservations;
 
+    #[ORM\Column]
+    private ?int $Quantity = null;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -100,6 +103,18 @@ class Pack
                 $reservation->setPack(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->Quantity;
+    }
+
+    public function setQuantity(?int $Quantity): static
+    {
+        $this->Quantity = $Quantity;
 
         return $this;
     }
