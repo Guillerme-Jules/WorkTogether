@@ -1,5 +1,6 @@
-sentry:
-    dsn: '%env(SENTRY_DSN)%'
+when@prod:
+    sentry:
+        dsn: '%env(SENTRY_DSN)%'
         # Specify a fixed sample rate
         # Set a sampling rate for profiling - this is relative to traces_sample_rate
 
