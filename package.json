@@ -24,6 +24,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "bootstrap-icons": "^1.11.1"
+        "bootstrap-icons": "^1.11.1",
+        "cypress": "^13.7.2"
     }
 }
