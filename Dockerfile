@@ -46,4 +46,4 @@ COPY bin ./bin
 ENV APP_ENV prod
 ENV APP_DEBUG 0
 
-RUN composer install --no-interaction
+RUN composer install --no-interaction --no-scripts
