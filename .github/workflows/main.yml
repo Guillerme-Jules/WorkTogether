@@ -28,4 +28,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.WORTOGETHERUSER }}/worktogether-app:${{GITHUB_REF}}
+          tags: ${{ secrets.WORTOGETHERUSER }}/worktogether-app:${{github.GITHUB_SHA}}
