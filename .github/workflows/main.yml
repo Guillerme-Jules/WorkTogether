@@ -33,6 +33,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   deploy:
+    needs: build
     name: Deploy
     runs-on: ubuntu-latest
     steps:
