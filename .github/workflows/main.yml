@@ -32,9 +32,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  deploy:
+  deploy-test:
     needs: build
-    name: Deploy
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using ssh key
@@ -44,6 +43,18 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEYSSHDEVOPS }}
         script: |
-          sed -i "s|\(worktogether:\).*|\1${{github.sha}}|" docker-compose.yml
-          docker compose up -d
+          sed -i "s|\(worktogether:\).*|\1${{github.sha}}|" docker-compose-test.yml
+          docker compose -f docker-compose-test.yml -p worktogether_test up
+
+  
+  cypress-test:
+    needs: deploy-test
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: test
+        uses: cypress-io/github-action@v6
+        with:
+          config: baseUrl=http://${{ secrets.IPDEVOPS }}:81
         
