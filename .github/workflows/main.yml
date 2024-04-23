@@ -57,7 +57,16 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           config: baseUrl=http://${{ secrets.IPDEVOPS }}:81        
-
+      - name: deleteEnvTest
+        uses: appleboy/ssh-action@v1.0.3
+        if: always()
+        with:
+          host: ${{ secrets.IPDEVOPS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEYSSHDEVOPS }}
+          script: |
+            docker compose -p worktogether_test down
+            
   deploy:
     needs: cypress-test
     runs-on: ubuntu-latest
@@ -71,3 +80,4 @@ jobs:
         script: |
           sed -i "s|\(worktogether:\).*|\1${{github.sha}}|" docker-compose.yml
           docker compose up -d
+
