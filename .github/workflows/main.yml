@@ -44,7 +44,7 @@ jobs:
         key: ${{ secrets.KEYSSHDEVOPS }}
         script: |
           sed -i "s|\(worktogether:\).*|\1${{github.sha}}|" docker-compose-test.yml
-          docker compose -f docker-compose-test.yml -p worktogether_test up
+          docker compose -f docker-compose-test.yml -p worktogether_test up -d
 
   
   cypress-test:
