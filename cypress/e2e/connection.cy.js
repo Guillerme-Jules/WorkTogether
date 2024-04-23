@@ -1,14 +1,16 @@
 describe('Formulaire de connection', () => {
   it('Connection reussi', () => {
-    cy.visit('http://127.0.0.1:8000/login')
+    cy.visit('/login')
     cy.get('#username').type("user1@example.com")
     cy.get('#password').type("password")
     cy.get('#login').click()
-    cy.url().should('eq', 'http://127.0.0.1:8000/')
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/')
+    })
   })
 
   it('Connection echouer', () => {
-    cy.visit('http://127.0.0.1:8000/login')
+    cy.visit('/login')
     cy.get('#username').type("user1@a.com")
     cy.get('#password').type("passwordas")
     cy.get('#login').click()
