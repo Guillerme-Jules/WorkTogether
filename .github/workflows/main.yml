@@ -65,6 +65,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEYSSHDEVOPS }}
           script: |
+            docker image prune -a -f
             docker compose -p worktogether_test down
             
   deploy:
