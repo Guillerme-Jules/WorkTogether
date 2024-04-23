@@ -56,5 +56,18 @@ jobs:
       - name: test
         uses: cypress-io/github-action@v6
         with:
-          config: baseUrl=http://${{ secrets.IPDEVOPS }}:81
-        
+          config: baseUrl=http://${{ secrets.IPDEVOPS }}:81        
+
+  deploy:
+    needs: cypress-test
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using ssh key
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.IPDEVOPS }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEYSSHDEVOPS }}
+        script: |
+          sed -i "s|\(worktogether:\).*|\1${{github.sha}}|" docker-compose.yml
+          docker compose up -d
