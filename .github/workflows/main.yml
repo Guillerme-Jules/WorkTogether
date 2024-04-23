@@ -31,3 +31,18 @@ jobs:
           tags: ${{ secrets.WORTOGETHERUSER }}/worktogether:${{github.sha}}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using ssh key
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.IPDEVOPS }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEYSSHDEVOPS }}
+        script: |
+          sed -i "s|\(worktogether:\).*|\1${{github.sha}}|" docker-compose.yml
+          docker compose up -d
+        
